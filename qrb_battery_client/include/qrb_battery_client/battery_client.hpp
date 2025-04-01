@@ -7,8 +7,9 @@
 #define QRB_BATTERY_CLIEN__BATTERY__CLIENT_HPP
 
 #include <dbus/dbus.h>
-#include <memory>
 #include <string.h>
+
+#include <memory>
 
 namespace qrb
 {

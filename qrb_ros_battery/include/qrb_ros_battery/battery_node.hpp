@@ -27,7 +27,7 @@ private:
   void timer_callback();
   void pack_battery_state_msg(std::map<std::string, std::string> & data,
       std::unique_ptr<sensor_msgs::msg::BatteryState> & msg);
-  std::map<std::string, std::string> string_to_map(std::string & str);
+  std::map<std::string, std::string> string_to_map(std::unique_ptr<std::string> str);
   float safestof(std::string & str);
 
   rclcpp::TimerBase::SharedPtr timer_;

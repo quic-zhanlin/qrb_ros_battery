@@ -107,10 +107,11 @@ void BatteryStatsReader::pack_battery_state_msg(std::map<std::string, std::strin
   msg->cell_temperature.push_back(safestof(data["temp"]));     // 0
 }
 
-std::map<std::string, std::string> BatteryStatsReader::string_to_map(std::string & str)
+std::map<std::string, std::string> BatteryStatsReader::string_to_map(
+    std::unique_ptr<std::string> str)
 {
   std::map<std::string, std::string> result;
-  std::istringstream iss(str);
+  std::istringstream iss(*str);
 
   std::string line;
   while (std::getline(iss, line)) {
@@ -133,7 +134,7 @@ void BatteryStatsReader::timer_callback()
   auto ret = bc_.GetBatteryStats(data);
   RCLCPP_DEBUG(this->get_logger(), "get battery state data: %s", (*data).c_str());
 
-  auto bstatmap = string_to_map(*data);
+  auto bstatmap = string_to_map(std::move(data));
 
   pack_battery_state_msg(bstatmap, msg);
   publisher_->publish(std::move(msg));

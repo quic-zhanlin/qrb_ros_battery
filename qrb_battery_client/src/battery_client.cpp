@@ -12,7 +12,7 @@ const char * const SERVER_BUS_NAME = "in.battery_server";
 const char * const INTERFACE_NAME = "in.battery_server.system";
 const char * const SERVER_OBJECT_PATH_NAME = "/in/battery_system/server";
 const char * const METHOD_NAME = "get_battery_stats";
-const char * const MATCH_RULES = "type='message',interface='in.battery_server.system'";
+const char * const MATCH_RULES = "type='method_call',interface='in.battery_server.system'";
 
 namespace qrb
 {
@@ -91,7 +91,6 @@ bool BatteryClient::GetServerMsg(std::unique_ptr<std::string> & msg)
   }
 
   msg = std::make_unique<std::string>(raw_cstr);
-  free(raw_cstr);
 
   dbus_message_unref(reply);
 
