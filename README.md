@@ -17,12 +17,12 @@ We provide two ways to use this package.
 <summary>Docker</summary>
 
 #### Setup
-1. Please follow this [steps](https://github.com/quic-qrb-ros/qrb_ros_docker?tab=readme-ov-file#quickstart) to setup docker env.
+1. Please follow this [steps](https://github.com/qualcomm-qrb-ros/qrb_ros_docker?tab=readme-ov-file#quickstart) to setup docker env.
 2. Download qrb_ros_battery and dependencies
     ```bash
     cd ${QRB_ROS_WS}/src
 
-    git clone https://github.com/quic-qrb-ros/qrb_ros_battery.git
+    git clone https://github.com/qualcomm-qrb-ros/qrb_ros_battery.git
     ```
 
 #### Build
@@ -45,13 +45,13 @@ ros2 run qrb_ros_battery battery_node
 <summary>QIRP-SDK</summary>
 
 #### Setup
-1. Please follow this [steps](https://quic-qrb-ros.github.io/getting_started/index.html) to setup qirp-sdk env.
+1. Please follow this [steps](https://qualcomm-qrb-ros.github.io/getting_started/index.html) to setup qirp-sdk env.
 2. Download qrb_ros_battery and dependencies
     ```bash
     mkdir -p <qirp_decompressed_workspace>/qirp-sdk/ros_ws
     cd <qirp_decompressed_workspace>/qirp-sdk/ros_ws
 
-    git clone https://github.com/quic-qrb-ros/qrb_ros_battery.git
+    git clone https://github.com/qualcomm-qrb-ros/qrb_ros_battery.git
     ```
 
 #### Build
@@ -93,7 +93,7 @@ ros2 run qrb_ros_battery battery_node
 
 <br>
 
-You can get more details from [here](https://quic-qrb-ros.github.io/main/index.html).
+You can get more details from [here](https://qualcomm-qrb-ros.github.io/main/index.html).
 
 ## Contributing
 
@@ -107,7 +107,7 @@ We would love to have you as a part of the QRB ROS community. Whether you are he
 
 * **Padmanabha Kavasseri** - *Initial work* - [PadmanabhaKavasseri](https://github.com/PadmanabhaKavasseri)
 
-See also the list of [contributors](https://github.com/quic-qrb-ros/qrb_ros_battery/graphs/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/qualcomm-qrb-ros/qrb_ros_battery/graphs/contributors) who participated in this project.
 
 
 ## License
