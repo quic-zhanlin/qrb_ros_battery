@@ -2,7 +2,7 @@ Source: ros-jazzy-qrb-battery-client
 Section: misc
 Priority: optional
 Maintainer: pkavasse <quic_pkavasse@quicinc.com>
-Build-Depends: debhelper (>= 9.0.0), ros-jazzy-ament-cmake-auto, ros-jazzy-ament-lint-auto <!nocheck>, ros-jazzy-ament-lint-common <!nocheck>
+Build-Depends: debhelper-compat (= 13), libdbus-1-dev, autoconf, libtool, automake,pkg-config,ros-jazzy-ament-cmake-auto, ros-jazzy-ament-lint-auto <!nocheck>, ros-jazzy-ament-lint-common <!nocheck>
 Homepage: 
 Standards-Version: 3.9.2
 
