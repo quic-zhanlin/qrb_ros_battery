@@ -22,7 +22,7 @@ BatteryStatsReader::BatteryStatsReader() : Node("battery_stats_publisher")
 {
   RCLCPP_INFO(this->get_logger(), "Started Battery Node");
   publisher_ = this->create_publisher<sensor_msgs::msg::BatteryState>("battery_stats", 10);
-  bool ret = bc_.InitConnection();
+  bool ret = bc_.init_connection();
   if (!ret) {
     RCLCPP_ERROR(this->get_logger(), "Battery client connect failed");
   } else {
@@ -131,7 +131,7 @@ void BatteryStatsReader::timer_callback()
   RCLCPP_DEBUG(this->get_logger(), "begin timer callback");
   std::unique_ptr<std::string> data;
   auto msg = std::make_unique<sensor_msgs::msg::BatteryState>();
-  auto ret = bc_.GetBatteryStats(data);
+  auto ret = bc_.get_battery_stats(data);
   RCLCPP_DEBUG(this->get_logger(), "get battery state data: %s", (*data).c_str());
 
   auto bstatmap = string_to_map(std::move(data));
