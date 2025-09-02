@@ -10,7 +10,7 @@
 int main(int argc, char ** argv)
 {
   qrb::battery_client::BatteryClient bc;
-  bc.InitConnection();
+  bc.init_connection();
   while (1) {
     char input;
     std::cin >> input;
@@ -18,7 +18,7 @@ int main(int argc, char ** argv)
       break;
     }
     std::unique_ptr<std::string> data;
-    auto ret = bc.GetBatteryStats(data);
+    auto ret = bc.get_battery_stats(data);
     if (!ret) {
       std::cout << "Get Battery Stats Failed" << std::endl;
       std::cout << std::endl;
@@ -28,6 +28,6 @@ int main(int argc, char ** argv)
     std::cout << std::endl;
     std::cout << "Type 's' to get battery stats:: " << std::endl;
   }
-  bc.CloseConnection();
+  bc.close_connection();
   return 0;
 }
