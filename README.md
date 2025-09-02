@@ -14,9 +14,7 @@
 
 ## 👋 Overview
 
-The [QRB ROS Battery](https://github.com/qualcomm-qrb-ros/qrb_ros_battery) is a ROS package that publishes battery state data from system node. It provides:
-
-- publish battery state data.
+The [QRB ROS Battery](https://github.com/qualcomm-qrb-ros/qrb_ros_battery) is a ROS package that publishes battery state data from system node.
 
 <div align="center">
   <img src="./docs/assets/architecture.png" alt="architecture">
@@ -28,19 +26,14 @@ The [`qrb_ros_battery`](https://github.com/qualcomm-qrb-ros/qrb_ros_battery/tree
 
 The [`qrb_battery_client`](https://github.com/qualcomm-qrb-ros/qrb_ros_battery/tree/main/qrb_battery_client) is a C++ library, it provides APIs to `qrb_ros_battery` for querying battery state data from lower layer `Battery Service`.
 
-The `Battery Service` is Qualcomm battery framework, it exports APIs for accessing Qualcomm-powered device 's battery state.
+The `Battery Service` is a background service designed to provide APIs for client-side access and get battery state data.
 
 ## 🔎 Table of contents
 - [APIs](#-apis)
-  - [🔹 `qrb_ros_battery` APIs](#-qrb_ros_battery-apis)
-  - [🔹 `qrb_battery_client` APIs](#-qrb_battery_client-apis)
 - [Supported targets](#-supported-targets)
 - [Installation](#-installation)
 - [Usage](#-usage)
-  - [Start the battery node](#start-the-battery-node)
 - [Build from source](#-build-from-source)
-  - [Dependencies](#dependencies)
-  - [Build](#build)
 - [Contributing](#-contributing)
 - [Contributors](#️-contributors)
 - [FAQs](#-faqs)
@@ -150,6 +143,35 @@ ros2 topic list
 /battery_stats
 ```
 
+### The output of the topic
+
+Here just a example for the topic output.
+
+```bash
+header:
+  stamp:
+      sec: 1756810050
+      nanosec: 208103261
+  frame_id: battery_stats
+voltage: 4259866.0
+temperature: 250.0
+current: -134584.0
+charge: 3360600.0
+capacity: 100.0
+design_capacity: -1.0
+percentage: 100.0
+power_supply_status: 2
+power_supply_health: 1
+power_supply_technology: 2
+present: true
+cell_voltage:
+- 4259866.0
+cell_temperature:
+- 250.0
+location: battery_stats
+serial_number: battery_stats
+```
+
 ---
 
 ## 👨‍💻 Build from source
@@ -196,7 +218,7 @@ Thanks to all our contributors who have helped make this project better!
 ## ❔ FAQs
 
 <details>
-<summary><strong>Why do I see the battery ros node error exit?</strong></summary>
+<summary><strong>Why do I see the battery ros node exit with `invalid_argument` error?</strong></summary>
 
 - Please ensure that the battery service is running.
 </details>
