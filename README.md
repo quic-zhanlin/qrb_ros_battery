@@ -1,106 +1,207 @@
-# QRB ROS BATTERY
+<div align="center">
+  <h1>QRB ROS Battery</h1>
+  <p align="center">
+    <img src="https://s7d1.scene7.com/is/image/dmqualcommprod/rb3gen2-dev-kits-hero-7" alt="Qualcomm QRB ROS" title="Qualcomm QRB ROS" />
+  </p>
+  <p>ROS Packages for Battery State on Qualcomm Robotics Platforms</p>
 
-## Overview
+  <a href="https://ubuntu.com/download/qualcomm-iot" target="_blank"><img src="https://img.shields.io/badge/Qualcomm%20Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white" alt="Qualcomm Ubuntu"></a>
+  <a href="https://docs.ros.org/en/jazzy/" target="_blank"><img src="https://img.shields.io/badge/ROS%20Jazzy-1c428a?style=for-the-badge&logo=ros&logoColor=white" alt="Jazzy"></a>
 
-`qrb_ros_battery` is a package to publish the battery state data from system node.
-- This package communicates with the battery service via DBus. The battery service obtains the current battery status by accessing the sys nodes.
+</div>
 
-## Quick Start
+---
 
-> **Note：**
-> This document 's build & run is the latest.
-> If it conflict with the online document, please follow this.
+## 👋 Overview
 
-We provide two ways to use this package.
+The [QRB ROS Battery](https://github.com/qualcomm-qrb-ros/qrb_ros_battery) is a ROS package that publishes battery state data from system node. It provides:
 
-<details>
-<summary>Docker</summary>
+- publish battery state data.
 
-#### Setup
-1. Please follow this [steps](https://github.com/qualcomm-qrb-ros/qrb_ros_docker?tab=readme-ov-file#quickstart) to setup docker env.
-2. Download qrb_ros_battery and dependencies
-    ```bash
-    cd ${QRB_ROS_WS}/src
-
-    git clone https://github.com/qualcomm-qrb-ros/qrb_ros_battery.git
-    ```
-
-#### Build
-```bash
-colcon build
-```
-
-#### Run
-```bash
-cd ${QRB_ROS_WS}/src
-
-source install/local_setup.sh
-ros2 run qrb_ros_battery battery_node
-```
-
-</details>
- 
-
-<details>
-<summary>QIRP-SDK</summary>
-
-#### Setup
-1. Please follow this [steps](https://qualcomm-qrb-ros.github.io/getting_started/index.html) to setup qirp-sdk env.
-2. Download qrb_ros_battery and dependencies
-    ```bash
-    mkdir -p <qirp_decompressed_workspace>/qirp-sdk/ros_ws
-    cd <qirp_decompressed_workspace>/qirp-sdk/ros_ws
-
-    git clone https://github.com/qualcomm-qrb-ros/qrb_ros_battery.git
-    ```
-
-#### Build
-1. Build the project
-    ```bash
-    colcon build --continue-on-error --cmake-args ${CMAKE_ARGS}
-    ```
-2. Install the package
-    ```bash
-    cd <qirp_decompressed_workspace>/qirp-sdk/ros_ws/install/qrb_ros_battery
-    tar -czvf qrb_ros_battery.tar.gz include lib share
-    scp qrb_ros_battery.tar.gz root@[ip-addr]:/home/
-    cd <qirp_decompressed_workspace>/qirp-sdk/ros_ws/install/qrb_battery_client
-    tar -czvf qrb_battery_client.tar.gz include lib share
-    scp qrb_battery_client.tar.gz root@[ip-addr]:/home/
-    ssh root@[ip-addr]
-    (ssh) mount -o remount rw /usr
-    (ssh) tar --no-overwrite-dir --no-same-owner -zxf /home/qrb_ros_battery.tar.gz -C /usr/
-    (ssh) tar --no-overwrite-dir --no-same-owner -zxf /home/qrb_battery_client.tar.gz -C /usr/
-    ```
-
-#### Run
-```bash
-(ssh) source /usr/share/qirp-setup.sh
-(ssh) setenforce 0
-(ssh) ros2 run qrb_ros_battery battery_node
-```
-
-</details>
+<div align="center">
+  <img src="./docs/assets/architecture.png" alt="architecture">
+</div>
 
 <br>
 
-You can get more details from [here](https://qualcomm-qrb-ros.github.io/main/index.html).
+The [`qrb_ros_battery`](https://github.com/qualcomm-qrb-ros/qrb_ros_battery/tree/main/qrb_ros_battery) is a ROS 2 package. It creates a publisher to publish battery state data from system node.
 
-## Contributing
+The [`qrb_battery_client`](https://github.com/qualcomm-qrb-ros/qrb_ros_battery/tree/main/qrb_battery_client) is a C++ library, it provides APIs to `qrb_ros_battery` for querying battery state data from lower layer `Battery Service`.
 
-We would love to have you as a part of the QRB ROS community. Whether you are helping us fix bugs, proposing new features, improving our documentation, or spreading the word, please refer to our [contribution guidelines](./CONTRIBUTING.md) and [code of conduct](./CODE_OF_CONDUCT.md).
+The `Battery Service` is Qualcomm battery framework, it exports APIs for accessing Qualcomm-powered device 's battery state.
 
-- Bug report: If you see an error message or encounter failures, please create a [bug report](../../issues)
-- Feature Request: If you have an idea or if there is a capability that is missing and would make development easier and more robust, please submit a [feature request](../../issues)
+## 🔎 Table of contents
+- [APIs](#-apis)
+  - [🔹 `qrb_ros_battery` APIs](#-qrb_ros_battery-apis)
+  - [🔹 `qrb_battery_client` APIs](#-qrb_battery_client-apis)
+- [Supported targets](#-supported-targets)
+- [Installation](#-installation)
+- [Usage](#-usage)
+  - [Start the battery node](#start-the-battery-node)
+- [Build from source](#-build-from-source)
+  - [Dependencies](#dependencies)
+  - [Build](#build)
+- [Contributing](#-contributing)
+- [Contributors](#️-contributors)
+- [FAQs](#-faqs)
+- [License](#-license)
+
+## ⚓ APIs
+
+### 🔹 `qrb_ros_battery` APIs
+
+<table>
+  <tr>
+    <th>Interface</th>
+    <th>Name</th>
+    <th>Type</th>
+    <td>Description</td>
+  </tr>
+  <tr>
+    <td>Publisher</td>
+    <td>/battery_stats</td>
+    <td>sensor_msgs/msg/BatteryState</td>
+    <td>output battery status data</td>
+  </tr>
+</table>
+
+### 🔹 `qrb_battery_client` APIs
+
+<table>
+  <tr>
+    <th>Function</th>
+    <th>Parameters</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>bool init_connection()</td>
+    <td>Empty</td>
+    <td>Connect with battery service, return <b>true</b> means init successfully.</td>
+  </tr>
+  <tr>
+    <td>void close_connection()</td>
+    <td>Empty</td>
+    <td>Disconnect with battery service.</td>
+  </tr>
+  <tr>
+    <td>bool get_battery_stats(std::unique_ptr<std::string> & msg)</td>
+    <td>
+      <b>msg</b>: Pointer to battery status info
+    </td>
+    <td>Get battery status. Returns <b>true</b> if successful. If <b>true</b>, <b>msg</b> will point to the latest battery info.</td>
+  </tr>
+</table>
+
+## 🎯 Supported targets
+
+<table >
+  <tr>
+    <th>Development Hardware</th>
+    <td>Qualcomm Dragonwing™ RB3 Gen2</td>
+  </tr>
+  <tr>
+    <th>Hardware Overview</th>
+    <th><a href="https://www.qualcomm.com/developer/hardware/rb3-gen-2-development-kit"><img src="https://s7d1.scene7.com/is/image/dmqualcommprod/rb3-gen2-carousel?fmt=webp-alpha&qlt=85" width="180"/></a></th>
+  </tr>
+</table>
+
+---
+
+## ✨ Installation
+
+> [!IMPORTANT]
+> **PREREQUISITES**: The following steps need to be run on **Qualcomm Ubuntu** and **ROS Jazzy**.<br>
+> Reference [Install Ubuntu on Qualcomm IoT Platforms](https://ubuntu.com/download/qualcomm-iot) and [Install ROS Jazzy](https://docs.ros.org/en/jazzy/index.html) to setup environment. <br>
+> For Qualcomm Linux, please check out the [Qualcomm Intelligent Robotics Product SDK](https://docs.qualcomm.com/bundle/publicresource/topics/80-70018-265/introduction_1.html?vproduct=1601111740013072&version=1.4&facet=Qualcomm%20Intelligent%20Robotics%20Product%20(QIRP)%20SDK) documents.
+
+Add Qualcomm IOT PPA for Ubuntu:
+
+```bash
+sudo add-apt-repository ppa:ubuntu-qcom-iot/qcom-noble-ppa
+sudo add-apt-repository ppa:ubuntu-qcom-iot/qirp
+sudo apt update
+```
+
+Install Debian package:
+
+```bash
+sudo apt install ros-jazzy-qrb-ros-battery qcom-battery-service
+```
+
+## 🚀 Usage
+
+### Start the battery node
+
+```bash
+source /opt/ros/jazzy/setup.bash
+ros2 run qrb_ros_battery battery_node
+```
+The output for these commands:
+
+```bash
+[INFO] [1756720182.917875184] [battery_stats_publisher]: Started Battery Node
+...
+```
+
+Then you can check ROS topics with the topic `/battery_stats`.
+
+```bash
+ros2 topic list
+/battery_stats
+```
+
+---
+
+## 👨‍💻 Build from source
+
+### Dependencies
+Install dependencies `ros-dev-tools`:
+
+```bash
+sudo add-apt-repository ppa:ubuntu-qcom-iot/qcom-noble-ppa
+sudo add-apt-repository ppa:ubuntu-qcom-iot/qirp
+sudo apt update
+
+sudo apt install libdbus-1-dev \
+  ros-dev-tools
+```
+
+### Build
+Download the source code and build with colcon
+
+```bash
+source /opt/ros/jazzy/setup.bash
+git clone https://github.com/qualcomm-qrb-ros/qrb_ros_battery.git
+colcon build
+```
 
 
-## Authors
+## 🤝 Contributing
 
-* **Padmanabha Kavasseri** - *Initial work* - [PadmanabhaKavasseri](https://github.com/PadmanabhaKavasseri)
+We love community contributions! Get started by reading our [CONTRIBUTING.md](CONTRIBUTING.md).<br>
+Feel free to create an issue for bug report, feature requests or any discussion💡.
 
-See also the list of [contributors](https://github.com/qualcomm-qrb-ros/qrb_ros_battery/graphs/contributors) who participated in this project.
+## ❤️ Contributors
+
+Thanks to all our contributors who have helped make this project better!
+
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/quic-zhanlin"><img src="https://avatars.githubusercontent.com/u/88314584?v=4" width="100" height="100" alt="quic-zhanlin"/><br /><sub><b>quic-zhanlin</b></sub></a></td>
+    <td align="center"><a href="https://github.com/jiaxshi"><img src="https://avatars.githubusercontent.com/u/147487233?v=4" width="100" height="100" alt="jiaxshi"/><br /><sub><b>jiaxshi</b></sub></a></td>
+    <td align="center"><a href="https://github.com/PadmanabhaKavasseri"><img src="https://avatars.githubusercontent.com/u/45885303?v=4" width="100" height="100" alt="Padmanabha Kavasseri"/><br /><sub><b>Padmanabha Kavasseri</b></sub></a></td>
+  </tr>
+</table>
+
+## ❔ FAQs
+
+<details>
+<summary><strong>Why do I see the battery ros node error exit?</strong></summary>
+
+- Please ensure that the battery service is running.
+</details>
 
 
-## License
+## 📜 License
 
-Project is licensed under the [BSD-3-clause License](https://spdx.org/licenses/BSD-3-Clause.html). See [LICENSE](./LICENSE) for the full license text.
+Project is licensed under the [BSD-3-Clause](https://spdx.org/licenses/BSD-3-Clause.html) License. See [LICENSE](./LICENSE) for the full license text.
