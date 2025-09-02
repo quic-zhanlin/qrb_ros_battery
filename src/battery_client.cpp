@@ -18,31 +18,31 @@ namespace qrb
 {
 namespace battery_client
 {
-bool BatteryClient::InitConnection()
+bool BatteryClient::init_connection()
 {
   DBusError dbus_error;
   dbus_error_init(&dbus_error);
   _conn = dbus_bus_get(DBUS_BUS_SYSTEM, &dbus_error);
 
   if (dbus_error_is_set(&dbus_error))
-    PrintDusError(dbus_error);
+    print_dus_error(dbus_error);
 
   return _conn == NULL ? false : true;
 }
 
 BatteryClient::~BatteryClient()
 {
-  CloseConnection();
+  close_connection();
 }
 
-void BatteryClient::CloseConnection()
+void BatteryClient::close_connection()
 {
   if (_conn != NULL) {
     dbus_connection_unref(_conn);
   }
 }
 
-bool BatteryClient::GetServerMsg(std::unique_ptr<std::string> & msg)
+bool BatteryClient::get_server_msg(std::unique_ptr<std::string> & msg)
 {
   DBusMessage * request;
   DBusError error;
@@ -97,30 +97,30 @@ bool BatteryClient::GetServerMsg(std::unique_ptr<std::string> & msg)
   return true;
 }
 
-bool BatteryClient::GetBatteryStats(std::unique_ptr<std::string> & msg)
+bool BatteryClient::get_battery_stats(std::unique_ptr<std::string> & msg)
 {
   DBusError match_error;
   dbus_error_init(&match_error);
   dbus_bus_add_match(_conn, MATCH_RULES, &match_error);
   if (dbus_error_is_set(&match_error)) {
-    PrintDusError(match_error);
+    print_dus_error(match_error);
     return false;
   }
 
-  auto ret = GetServerMsg(msg);
+  auto ret = get_server_msg(msg);
 
   DBusError release_error;
   dbus_error_init(&release_error);
   if (dbus_bus_release_name(_conn, SERVER_BUS_NAME, &release_error) == -1) {
     if (dbus_error_is_set(&release_error)) {
-      PrintDusError(release_error);
+      print_dus_error(release_error);
     }
   }
 
   return ret;
 }
 
-void BatteryClient::PrintDusError(DBusError & dbus_error)
+void BatteryClient::print_dus_error(DBusError & dbus_error)
 {
   fprintf(stderr, "Get Dbus error: %s\n", dbus_error.message);
   dbus_error_free(&dbus_error);

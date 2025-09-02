@@ -18,14 +18,14 @@ namespace battery_client
 class BatteryClient
 {
 public:
-  bool InitConnection();
-  void CloseConnection();
-  bool GetBatteryStats(std::unique_ptr<std::string> & msg);
+  bool init_connection();
+  void close_connection();
+  bool get_battery_stats(std::unique_ptr<std::string> & msg);
   ~BatteryClient();
 
 private:
-  bool GetServerMsg(std::unique_ptr<std::string> & msg);
-  void PrintDusError(DBusError & dbus_error);
+  bool get_server_msg(std::unique_ptr<std::string> & msg);
+  void print_dus_error(DBusError & dbus_error);
   DBusConnection * _conn = NULL;
 };
 }  // namespace battery_client
